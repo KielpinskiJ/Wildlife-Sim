@@ -1,6 +1,8 @@
 import React from 'react';
+import Herbivore from './Herbivore';
+import Carnivore from './Carnivore';
 
-function Board({ size }) {
+function Board({ size, animals }) {
   const rows = Array.from({ length: size }, (_, i) => i);
   const columns = Array.from({ length: size }, (_, i) => i);
 
@@ -16,7 +18,17 @@ function Board({ size }) {
                 height: 20,
                 border: '1px solid black',
               }}
-            />
+            >
+              {animals.map((animal) =>
+                animal.x === column && animal.y === row ? (
+                  animal.type === 'herbivore' ? (
+                    <Herbivore id={animal.id}/>
+                  ) : (
+                    <Carnivore id={animal.id}/>
+                  )
+                ) : null
+              )}
+            </div>
           ))}
         </div>
       ))}
