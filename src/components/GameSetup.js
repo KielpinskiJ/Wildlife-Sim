@@ -1,31 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function GameSetup() {
-  const [boardSize, setBoardSize] = useState(20);
-  const [populationSize, setPopulationSize] = useState(50);
+function GameSetup({ 
+  onBoardSizeChange, 
+  onPopulationSizeChange, 
+  onGameStart,
+  defaultBoardSize,
+  defaultPopulationSize,
+}) {
+
+  const handleBoardSizeChange = (event) => {
+    onBoardSizeChange(event.target.value);
+  };
+
+  const handlePopulationSizeChange = (event) => {
+    onPopulationSizeChange(event.target.value);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //TODO Create the game start logic.
+    onGameStart();
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <label>
         Wielkość planszy:
-        <input
-          type="number"
-          value={boardSize}
-          onChange={(event) => setBoardSize(event.target.value)}
+        <input 
+          type="number" 
+          onChange={handleBoardSizeChange} 
+          defaultValue={defaultBoardSize}
         />
       </label>
       <br />
       <label>
         Wielkość populacji:
-        <input
-          type="number"
-          value={populationSize}
-          onChange={(event) => setPopulationSize(event.target.value)}
+        <input 
+          type="number" 
+          onChange={handlePopulationSizeChange} 
+          defaultValue={defaultPopulationSize}
         />
       </label>
       <br />
