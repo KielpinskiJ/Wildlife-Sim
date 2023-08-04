@@ -6,6 +6,7 @@ class Animal {
     this.x = x;
     this.y = y;
     this.gender = Math.random() < 0.5 ? 'male' : 'female';
+    this.reproducedThisTurn = false;
   }
 
   move(boardSize) {
@@ -22,6 +23,14 @@ class Animal {
       this.y = newY;
     }
   }
+
+  setReproducedThisTurn() {
+    this.reproducedThisTurn = true;
+  }
+
+  resetReproducedThisTurn() {
+    this.reproducedThisTurn = false;
+  }
 }
 
 class Herbivore extends Animal {
@@ -36,6 +45,15 @@ class Carnivore extends Animal {
     super(x, y);
     this.type = 'carnivore';
     this.turnsSinceEating = 0;
+    this.hasEatenThisTurn = false;
+  }
+
+  setHasEatenThisTurn() {
+    this.hasEatenThisTurn = true;
+  }
+
+  resetHasEatenThisTurn() {
+    this.hasEatenThisTurn = false;
   }
 }
 

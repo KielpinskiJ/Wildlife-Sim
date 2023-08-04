@@ -3,9 +3,11 @@ import React from 'react';
 function GameSetup({ 
   onBoardSizeChange, 
   onPopulationSizeChange, 
+  onMaxTurnsWithoutEatingChange,
   onGameStart,
   defaultBoardSize,
   defaultPopulationSize,
+  defaultMaxTurnsWithoutEating,
 }) {
 
   const handleBoardSizeChange = (event) => {
@@ -14,6 +16,10 @@ function GameSetup({
 
   const handlePopulationSizeChange = (event) => {
     onPopulationSizeChange(event.target.value);
+  };
+
+  const handleMaxTurnsWithoutEatingChange = (event) => {
+    onMaxTurnsWithoutEatingChange(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -38,6 +44,15 @@ function GameSetup({
           type="number" 
           onChange={handlePopulationSizeChange} 
           defaultValue={defaultPopulationSize}
+        />
+      </label>
+      <br />
+      <label>
+        Ilość tur, które mięsożerca wytrzyma bez jedzenia:
+        <input 
+          type="number" 
+          onChange={handleMaxTurnsWithoutEatingChange} 
+          defaultValue={defaultMaxTurnsWithoutEating}
         />
       </label>
       <br />

@@ -6,6 +6,7 @@ import { Herbivore, Carnivore } from './models/Animal';
 function App() {
   const [boardSize, setBoardSize] = useState(20);
   const [populationSize, setPopulationSize] = useState(50);
+  const [maxTurnsWithoutEating, setMaxTurnsWithoutEating] = useState(10);
   const [gameStarted, setGameStarted] = useState(false);
   const [animals, setAnimals] = useState([]);
   const [turn, setTurn] = useState(0);
@@ -38,9 +39,14 @@ function App() {
   
     // Loop through all carnivores
     animals.forEach((carnivore) => {
+      if (carnivore.hasEatenThisTurn) {
+        // Skip this animal if it has already eaten in this turn
+        return;
+      }
+
       if (carnivore.type === 'carnivore') {
         // Check if there is a herbivore on the same square
-        const herbivoreIndex = newAnimals.findIndex(
+        const herbivore = newAnimals.find(
           (herbivore) =>
             herbivore.type === 'herbivore' &&
             herbivore.x === carnivore.x &&
@@ -48,9 +54,10 @@ function App() {
         );
   
         // If there is a herbivore on the same square, remove it from the array and reset turnsSinceEating
-        if (herbivoreIndex !== -1) {
-          newAnimals.splice(herbivoreIndex, 1);
+        if (herbivore) {
+          newAnimals.filter(animal => animal.id !== herbivore.id);
           carnivore.turnsSinceEating = 0;
+          carnivore.setHasEatenThisTurn();
         } else {
           // If the carnivore didn't eat, increment turnsSinceEating
           carnivore.turnsSinceEating++;
@@ -76,17 +83,23 @@ function App() {
   
     // Loop through all animals
     animals.forEach((animal1) => {
+      if (animal1.reproducedThisTurn) {
+        // Skip this animal if it has already reproduced in this turn
+        return;
+      }
+  
       // Check if there is another animal of the same type but different gender on the same square
-      const animal2Index = newAnimals.findIndex(
+      const animal2 = newAnimals.find(
         (animal2) =>
           animal2.type === animal1.type &&
           animal2.gender !== animal1.gender &&
           animal2.x === animal1.x &&
-          animal2.y === animal1.y
+          animal2.y === animal1.y &&
+          !animal2.reproducedThisTurn
       );
   
       // If there is another animal on the same square, create a new animal on a random empty square
-      if (animal2Index !== -1) {
+      if (animal2) {
         const emptySquares = [];
         for (let x = 0; x < boardSize; x++) {
           for (let y = 0; y < boardSize; y++) {
@@ -103,6 +116,9 @@ function App() {
               ? new Herbivore(randomSquare.x, randomSquare.y)
               : new Carnivore(randomSquare.x, randomSquare.y);
           newAnimals.push(newAnimal);
+
+          animal1.setReproducedThisTurn();
+          animal2.setReproducedThisTurn();
         }
       }
     });
@@ -117,7 +133,7 @@ function App() {
     // Create a new array to store the updated list of animals
     const newAnimals = animals.filter(
       (animal) =>
-        animal.type !== 'carnivore' || animal.turnsSinceEating < 4
+        animal.type !== 'carnivore' || animal.turnsSinceEating < 10
     );
   
     // Update the state with the new list of animals
@@ -151,6 +167,15 @@ function App() {
   // Call handleDeath after animals have reproduced
   const animalsAfterDeath = handleDeath(animalsAfterReproduction);
 
+  // Reset hasEatenThisTurn and reproducedThisTurn for all animals
+  animalsAfterDeath.forEach((animal) => {
+    if (animal.type === 'carnivore') {
+      animal.resetHasEatenThisTurn();
+    }
+    animal.resetReproducedThisTurn();
+  });
+  
+
   // Update statistics
   handleUpdateStatistics(animalsAfterDeath);
 
@@ -163,9 +188,11 @@ function App() {
         <GameSetup 
           onBoardSizeChange={setBoardSize} 
           onPopulationSizeChange={setPopulationSize} 
+          onMaxTurnsWithoutEatingChange={setMaxTurnsWithoutEating}
           onGameStart={handleGameStart} 
           defaultBoardSize={boardSize}
           defaultPopulationSize={populationSize}
+          defaultMaxTurnsWithoutEating={maxTurnsWithoutEating}
         />
       )}
       {gameStarted && 
