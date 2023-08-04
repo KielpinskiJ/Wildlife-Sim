@@ -9,7 +9,8 @@ function Board({
   currentTurn,
   herbivoreCount,
   carnivoreCount,
-  eatenHerbivoresCount
+  eatenHerbivoresCount,
+  gameOver,
 }) {
   const rows = Array.from({ length: size }, (_, i) => i);
   const columns = Array.from({ length: size }, (_, i) => i);
@@ -48,7 +49,7 @@ function Board({
         <p>Liczba mięsożerców: {carnivoreCount}</p>
         <p>Liczba zjedzonych roślinożerców: {eatenHerbivoresCount}</p>
       </div>
-      <button onClick={onNextTurn}>Następna tura</button>
+      {!gameOver && <button onClick={onNextTurn}>Następna tura</button>}
     </div>
   );
 }

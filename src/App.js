@@ -5,14 +5,16 @@ import { Herbivore, Carnivore } from './models/Animal';
 
 function App() {
   const [boardSize, setBoardSize] = useState(20);
-  const [populationSize, setPopulationSize] = useState(50);
-  const [maxTurnsWithoutEating, setMaxTurnsWithoutEating] = useState(10);
+  const [populationSize, setPopulationSize] = useState(60);
+  const [maxTurnsWithoutEating, setMaxTurnsWithoutEating] = useState(8);
   const [gameStarted, setGameStarted] = useState(false);
   const [animals, setAnimals] = useState([]);
   const [turn, setTurn] = useState(0);
   const [herbivoreCount, setHerbivoreCount] = useState(0);
   const [carnivoreCount, setCarnivoreCount] = useState(0);
   const [eatenHerbivoresCount, setEatenHerbivoresCount] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+
 
 
   const handleGameStart = () => {
@@ -39,12 +41,13 @@ function App() {
   
     // Loop through all carnivores
     animals.forEach((carnivore) => {
-      if (carnivore.hasEatenThisTurn) {
-        // Skip this animal if it has already eaten in this turn
-        return;
-      }
 
       if (carnivore.type === 'carnivore') {
+        if (carnivore.hasEatenThisTurn) {
+          // Skip this animal if it has already eaten in this turn
+          return;
+        }
+        
         // Check if there is a herbivore on the same square
         const herbivore = newAnimals.find(
           (herbivore) =>
@@ -55,7 +58,8 @@ function App() {
   
         // If there is a herbivore on the same square, remove it from the array and reset turnsSinceEating
         if (herbivore) {
-          newAnimals.filter(animal => animal.id !== herbivore.id);
+          const herbivoreIndex = newAnimals.findIndex(animal => animal.id === herbivore.id);
+          newAnimals.splice(herbivoreIndex, 1);
           carnivore.turnsSinceEating = 0;
           carnivore.setHasEatenThisTurn();
         } else {
@@ -146,6 +150,31 @@ function App() {
     setHerbivoreCount(newAnimals.filter((animal) => animal.type === 'herbivore').length);
     setCarnivoreCount(newAnimals.filter((animal) => animal.type === 'carnivore').length);
   }
+
+  const handleEndGame = (animals, turn) => {
+    // Check if all herbivores or all carnivores have died
+    const herbivoresAlive = animals.some(animal => animal.type === 'herbivore');
+    const carnivoresAlive = animals.some(animal => animal.type === 'carnivore');
+  
+    // Check if the game has reached the maximum number of turns
+    const maxTurns = 80;
+    const reachedMaxTurns = turn >= maxTurns-1;
+  
+    if (!herbivoresAlive) {
+      // Display end game message for herbivores extinction
+      alert('Koniec gry! Wszyscy roślinożercy zginęli.');
+      setGameOver(true);
+    } else if (!carnivoresAlive) {
+      // Display end game message for carnivores extinction
+      alert('Koniec gry! Wszyscy mięsożercy zginęli.');
+      setGameOver(true);
+    } else if (reachedMaxTurns) {
+      // Display end game message for reaching maximum number of turns
+      alert(`Koniec gry! Osiągnąłeś maksymalną liczbę tur (${maxTurns}).`);
+      setGameOver(true);
+    }
+  };
+  
   
 
   const handleNextTurn = () => {
@@ -179,6 +208,9 @@ function App() {
   // Update statistics
   handleUpdateStatistics(animalsAfterDeath);
 
+  // Call handleEndGame after all other actions have been performed
+  handleEndGame(animalsAfterDeath, turn);
+
   };
 
   return (
@@ -204,6 +236,7 @@ function App() {
         herbivoreCount={herbivoreCount}
         carnivoreCount={carnivoreCount}
         eatenHerbivoresCount={eatenHerbivoresCount}
+        gameOver={gameOver}
         />}
     </div>
   );
