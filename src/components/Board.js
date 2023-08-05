@@ -3,7 +3,7 @@ import { BoardPropTypes } from '../prop-types/BoardPropTypes';
 import Herbivore from './Herbivore';
 import Carnivore from './Carnivore';
 
-function Board({ 
+function Board({
   size,
   animals,
   onNextTurn,
@@ -34,11 +34,11 @@ function Board({
                 {animals.map((animal) =>
                   animal.x === column && animal.y === row ? (
                     animal.type === 'herbivore' ? (
-                      <Herbivore key={animal.id} id={animal.id}/>
+                      <Herbivore key={animal.id} id={animal.id} />
                     ) : (
-                      <Carnivore key={animal.id} id={animal.id}/>
+                      <Carnivore key={animal.id} id={animal.id} />
                     )
-                  ) : null
+                  ) : null,
                 )}
               </div>
             ))}

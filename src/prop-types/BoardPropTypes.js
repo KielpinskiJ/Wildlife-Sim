@@ -8,7 +8,7 @@ export const BoardPropTypes = {
       y: PropTypes.number.isRequired,
       type: PropTypes.oneOf(['herbivore', 'carnivore']).isRequired,
       id: PropTypes.number.isRequired,
-    })
+    }),
   ).isRequired,
   onNextTurn: PropTypes.func.isRequired,
   currentTurn: PropTypes.number.isRequired,

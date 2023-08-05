@@ -15,8 +15,6 @@ function App() {
   const [eatenHerbivoresCount, setEatenHerbivoresCount] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
-
-
   const handleGameStart = () => {
     // Create initial animal objects with random positions
     const newAnimals = [];
@@ -31,34 +29,39 @@ function App() {
     setGameStarted(true);
 
     // Update statistics
-    setHerbivoreCount(newAnimals.filter((animal) => animal.type === 'herbivore').length);
-    setCarnivoreCount(newAnimals.filter((animal) => animal.type === 'carnivore').length);
+    setHerbivoreCount(
+      newAnimals.filter((animal) => animal.type === 'herbivore').length,
+    );
+    setCarnivoreCount(
+      newAnimals.filter((animal) => animal.type === 'carnivore').length,
+    );
   };
 
   const handleEating = (animals) => {
     // Create a new array to store the updated list of animals
     const newAnimals = [...animals];
-  
+
     // Loop through all carnivores
     animals.forEach((carnivore) => {
-
       if (carnivore.type === 'carnivore') {
         if (carnivore.hasEatenThisTurn) {
           // Skip this animal if it has already eaten in this turn
           return;
         }
-        
+
         // Check if there is a herbivore on the same square
         const herbivore = newAnimals.find(
           (herbivore) =>
             herbivore.type === 'herbivore' &&
             herbivore.x === carnivore.x &&
-            herbivore.y === carnivore.y
+            herbivore.y === carnivore.y,
         );
-  
+
         // If there is a herbivore on the same square, remove it from the array and reset turnsSinceEating
         if (herbivore) {
-          const herbivoreIndex = newAnimals.findIndex(animal => animal.id === herbivore.id);
+          const herbivoreIndex = newAnimals.findIndex(
+            (animal) => animal.id === herbivore.id,
+          );
           newAnimals.splice(herbivoreIndex, 1);
           carnivore.turnsSinceEating = 0;
           carnivore.setHasEatenThisTurn();
@@ -68,30 +71,29 @@ function App() {
         }
       }
     });
-  
+
     // Update the state with the new list of animals
     setAnimals(newAnimals);
 
     // Update statistics
     setEatenHerbivoresCount(
-      (prevCount) => prevCount + (animals.length - newAnimals.length)
+      (prevCount) => prevCount + (animals.length - newAnimals.length),
     );
 
     return newAnimals;
   };
-  
 
   const handleReproduction = (animals) => {
     // Create a new array to store the updated list of animals
     const newAnimals = [...animals];
-  
+
     // Loop through all animals
     animals.forEach((animal1) => {
       if (animal1.reproducedThisTurn) {
         // Skip this animal if it has already reproduced in this turn
         return;
       }
-  
+
       // Check if there is another animal of the same type but different gender on the same square
       const animal2 = newAnimals.find(
         (animal2) =>
@@ -99,15 +101,17 @@ function App() {
           animal2.gender !== animal1.gender &&
           animal2.x === animal1.x &&
           animal2.y === animal1.y &&
-          !animal2.reproducedThisTurn
+          !animal2.reproducedThisTurn,
       );
-  
+
       // If there is another animal on the same square, create a new animal on a random empty square
       if (animal2) {
         const emptySquares = [];
         for (let x = 0; x < boardSize; x++) {
           for (let y = 0; y < boardSize; y++) {
-            if (!newAnimals.some((animal) => animal.x === x && animal.y === y)) {
+            if (
+              !newAnimals.some((animal) => animal.x === x && animal.y === y)
+            ) {
               emptySquares.push({ x, y });
             }
           }
@@ -126,20 +130,19 @@ function App() {
         }
       }
     });
-  
+
     // Update the state with the new list of animals
     setAnimals(newAnimals);
 
     return newAnimals;
   };
-  
+
   const handleDeath = (animals) => {
     // Create a new array to store the updated list of animals
     const newAnimals = animals.filter(
-      (animal) =>
-        animal.type !== 'carnivore' || animal.turnsSinceEating < 10
+      (animal) => animal.type !== 'carnivore' || animal.turnsSinceEating < 10,
     );
-  
+
     // Update the state with the new list of animals
     setAnimals(newAnimals);
 
@@ -147,19 +150,27 @@ function App() {
   };
 
   const handleUpdateStatistics = (newAnimals) => {
-    setHerbivoreCount(newAnimals.filter((animal) => animal.type === 'herbivore').length);
-    setCarnivoreCount(newAnimals.filter((animal) => animal.type === 'carnivore').length);
+    setHerbivoreCount(
+      newAnimals.filter((animal) => animal.type === 'herbivore').length,
+    );
+    setCarnivoreCount(
+      newAnimals.filter((animal) => animal.type === 'carnivore').length,
+    );
   };
 
   const handleEndGame = (animals, turn) => {
     // Check if all herbivores or all carnivores have died
-    const herbivoresAlive = animals.some(animal => animal.type === 'herbivore');
-    const carnivoresAlive = animals.some(animal => animal.type === 'carnivore');
-  
+    const herbivoresAlive = animals.some(
+      (animal) => animal.type === 'herbivore',
+    );
+    const carnivoresAlive = animals.some(
+      (animal) => animal.type === 'carnivore',
+    );
+
     // Check if the game has reached the maximum number of turns
     const maxTurns = 80;
-    const reachedMaxTurns = turn >= maxTurns-1;
-  
+    const reachedMaxTurns = turn >= maxTurns - 1;
+
     if (!herbivoresAlive) {
       // Display end game message for herbivores extinction
       alert('Koniec gry! Wszyscy roślinożercy zginęli.');
@@ -174,13 +185,11 @@ function App() {
       setGameOver(true);
     }
   };
-  
-  
 
   const handleNextTurn = () => {
     // Update turn counter
     setTurn((prevTurn) => prevTurn + 1);
-  
+
     // Make animals move
     const newAnimals = animals.map((animal) => {
       animal.move(boardSize);
@@ -203,41 +212,40 @@ function App() {
       }
       animal.resetReproducedThisTurn();
     });
-  
 
     // Update statistics
     handleUpdateStatistics(animalsAfterDeath);
 
     // Call handleEndGame after all other actions have been performed
     handleEndGame(animalsAfterDeath, turn);
-
   };
 
   return (
     <div>
       <h1>Wildlife Simulator</h1>
       {!gameStarted && (
-        <GameSetup 
-          onBoardSizeChange={setBoardSize} 
-          onPopulationSizeChange={setPopulationSize} 
+        <GameSetup
+          onBoardSizeChange={setBoardSize}
+          onPopulationSizeChange={setPopulationSize}
           onMaxTurnsWithoutEatingChange={setMaxTurnsWithoutEating}
-          onGameStart={handleGameStart} 
+          onGameStart={handleGameStart}
           defaultBoardSize={boardSize}
           defaultPopulationSize={populationSize}
           defaultMaxTurnsWithoutEating={maxTurnsWithoutEating}
         />
       )}
-      {gameStarted && 
-      <Board 
-        size={boardSize} 
-        animals={animals} 
-        onNextTurn={handleNextTurn} 
-        currentTurn={turn}
-        herbivoreCount={herbivoreCount}
-        carnivoreCount={carnivoreCount}
-        eatenHerbivoresCount={eatenHerbivoresCount}
-        gameOver={gameOver}
-      />}
+      {gameStarted && (
+        <Board
+          size={boardSize}
+          animals={animals}
+          onNextTurn={handleNextTurn}
+          currentTurn={turn}
+          herbivoreCount={herbivoreCount}
+          carnivoreCount={carnivoreCount}
+          eatenHerbivoresCount={eatenHerbivoresCount}
+          gameOver={gameOver}
+        />
+      )}
     </div>
   );
 }

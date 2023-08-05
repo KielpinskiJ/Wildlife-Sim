@@ -1,16 +1,15 @@
 import React from 'react';
 import { GameSetupPropTypes } from '../prop-types/GameSetupPropTypes';
 
-function GameSetup({ 
-  onBoardSizeChange, 
-  onPopulationSizeChange, 
+function GameSetup({
+  onBoardSizeChange,
+  onPopulationSizeChange,
   onMaxTurnsWithoutEatingChange,
   onGameStart,
   defaultBoardSize,
   defaultPopulationSize,
   defaultMaxTurnsWithoutEating,
 }) {
-
   const handleBoardSizeChange = (event) => {
     onBoardSizeChange(event.target.value);
   };
@@ -32,27 +31,27 @@ function GameSetup({
     <form onSubmit={handleSubmit}>
       <label>
         Wielkość planszy:
-        <input 
-          type="number" 
-          onChange={handleBoardSizeChange} 
+        <input
+          type="number"
+          onChange={handleBoardSizeChange}
           defaultValue={defaultBoardSize}
         />
       </label>
       <br />
       <label>
         Wielkość populacji:
-        <input 
-          type="number" 
-          onChange={handlePopulationSizeChange} 
+        <input
+          type="number"
+          onChange={handlePopulationSizeChange}
           defaultValue={defaultPopulationSize}
         />
       </label>
       <br />
       <label>
         Ilość tur, które mięsożerca wytrzyma bez jedzenia:
-        <input 
-          type="number" 
-          onChange={handleMaxTurnsWithoutEatingChange} 
+        <input
+          type="number"
+          onChange={handleMaxTurnsWithoutEatingChange}
           defaultValue={defaultMaxTurnsWithoutEating}
         />
       </label>
