@@ -149,7 +149,7 @@ function App() {
   const handleUpdateStatistics = (newAnimals) => {
     setHerbivoreCount(newAnimals.filter((animal) => animal.type === 'herbivore').length);
     setCarnivoreCount(newAnimals.filter((animal) => animal.type === 'carnivore').length);
-  }
+  };
 
   const handleEndGame = (animals, turn) => {
     // Check if all herbivores or all carnivores have died
@@ -187,29 +187,29 @@ function App() {
       return animal;
     });
 
-  // Call handleEating after animals have moved
-  const animalsAfterEating = handleEating(newAnimals);
+    // Call handleEating after animals have moved
+    const animalsAfterEating = handleEating(newAnimals);
 
-  // Call handleReproduction after animals have eaten
-  const animalsAfterReproduction = handleReproduction(animalsAfterEating);
+    // Call handleReproduction after animals have eaten
+    const animalsAfterReproduction = handleReproduction(animalsAfterEating);
 
-  // Call handleDeath after animals have reproduced
-  const animalsAfterDeath = handleDeath(animalsAfterReproduction);
+    // Call handleDeath after animals have reproduced
+    const animalsAfterDeath = handleDeath(animalsAfterReproduction);
 
-  // Reset hasEatenThisTurn and reproducedThisTurn for all animals
-  animalsAfterDeath.forEach((animal) => {
-    if (animal.type === 'carnivore') {
-      animal.resetHasEatenThisTurn();
-    }
-    animal.resetReproducedThisTurn();
-  });
+    // Reset hasEatenThisTurn and reproducedThisTurn for all animals
+    animalsAfterDeath.forEach((animal) => {
+      if (animal.type === 'carnivore') {
+        animal.resetHasEatenThisTurn();
+      }
+      animal.resetReproducedThisTurn();
+    });
   
 
-  // Update statistics
-  handleUpdateStatistics(animalsAfterDeath);
+    // Update statistics
+    handleUpdateStatistics(animalsAfterDeath);
 
-  // Call handleEndGame after all other actions have been performed
-  handleEndGame(animalsAfterDeath, turn);
+    // Call handleEndGame after all other actions have been performed
+    handleEndGame(animalsAfterDeath, turn);
 
   };
 
@@ -237,7 +237,7 @@ function App() {
         carnivoreCount={carnivoreCount}
         eatenHerbivoresCount={eatenHerbivoresCount}
         gameOver={gameOver}
-        />}
+      />}
     </div>
   );
 }

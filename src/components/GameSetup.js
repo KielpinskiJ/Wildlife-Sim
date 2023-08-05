@@ -1,4 +1,5 @@
 import React from 'react';
+import { GameSetupPropTypes } from '../prop-types/GameSetupPropTypes';
 
 function GameSetup({ 
   onBoardSizeChange, 
@@ -60,5 +61,7 @@ function GameSetup({
     </form>
   );
 }
+
+GameSetup.propTypes = GameSetupPropTypes;
 
 export default GameSetup;

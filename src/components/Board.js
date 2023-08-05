@@ -1,4 +1,5 @@
 import React from 'react';
+import { BoardPropTypes } from '../prop-types/BoardPropTypes';
 import Herbivore from './Herbivore';
 import Carnivore from './Carnivore';
 
@@ -53,5 +54,7 @@ function Board({
     </div>
   );
 }
+
+Board.propTypes = BoardPropTypes;
 
 export default Board;
