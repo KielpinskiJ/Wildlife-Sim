@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Wildlife-Sim/static/css/main.e6c13ad2.css",
+    "main.js": "/Wildlife-Sim/static/js/main.97cfafc8.js",
+    "static/js/787.32f63f30.chunk.js": "/Wildlife-Sim/static/js/787.32f63f30.chunk.js",
+    "index.html": "/Wildlife-Sim/index.html",
+    "main.e6c13ad2.css.map": "/Wildlife-Sim/static/css/main.e6c13ad2.css.map",
+    "main.97cfafc8.js.map": "/Wildlife-Sim/static/js/main.97cfafc8.js.map",
+    "787.32f63f30.chunk.js.map": "/Wildlife-Sim/static/js/787.32f63f30.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.97cfafc8.js"
+  ]
+}
